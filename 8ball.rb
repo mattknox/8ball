@@ -1,7 +1,7 @@
 test_code = <<EOF
-   def zot
-       3+4
-   end
+  def zot
+    3+4
+  end
 EOF
 
 require "java"
