@@ -59,6 +59,10 @@ end
 class MethodDefVisitor < EightBallVisitor
 end
 
-r = org.jruby.Ruby.getDefaultInstance
-ast = r.parse(test_code, "test_code", r.getCurrentContext.getCurrentScope, 0, true)
-ast.accept(ClassDefVisitor.new)
+class EightBallCompiler
+  def self.compile_string(ruby)
+    r = org.jruby.Ruby.getDefaultInstance
+    ast = r.parse(ruby, "test_code", r.getCurrentContext.getCurrentScope, 0, true)
+    ast.accept(ClassDefVisitor.new)
+  end
+end
