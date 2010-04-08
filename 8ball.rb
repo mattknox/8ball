@@ -115,6 +115,10 @@ class EightBallCompiler
     parse(ruby).accept(EightBallVisitor.new)
   end
 
+  def prelude
+    # this outputs the js runtime we need.
+  end
+
   def self.cs(ruby)
     puts "we're about to compile\n\n#{ruby}\n"
     pp (ast = parse(ruby))
