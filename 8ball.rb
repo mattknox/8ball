@@ -25,6 +25,16 @@ class Array
   def to_comma_list
     self.join(", ").wrap_with("()")
   end
+
+  def wrap_with(wrapper)
+    if wrapper.length == 2
+      wrapper.first.to_a + self + wrapper.last.to_a
+    elsif wrapper.length == 1
+      wrapper.to_a + self + wrapper.to_a
+    else
+      raise "bad argument"
+    end
+  end
 end
 
 class EightBallVisitor
@@ -68,10 +78,10 @@ class EightBallVisitor
   end
 
   def visitClassNode(node)
-    "this.define_class(\"#{node.getCPath.getName}\"," +
-      "function() {" +
-      visit(node.bodyNode) +
-      "})"
+    gather("this.define_class(\"#{node.getCPath.getName}\",",
+           "function() {",
+           visit(node.bodyNode),
+           "})")
   end
 
   def visitDefnNode(node)
@@ -86,8 +96,17 @@ class EightBallVisitor
     node.get_name
   end
 
+  def gather(*args)
+    args
+  end
+
+  def gather_with(str, *args)
+
+  end
+
   def compile_function(name, args, body)
-    "function #{name}#{compile_arglist(args)}" + compile_function_body(body).wrap_with("{}")
+    gather("function #{name}#{compile_arglist(args)}",
+           compile_function_body(body).wrap_with(["{\n", "\n}\n"]))
   end
 
   def compile_arglist(node)
@@ -96,8 +115,8 @@ class EightBallVisitor
 
   def compile_function_body(node)
     if node.is_a? Java::OrgJrubyAst::BlockNode
-      [node.child_nodes.to_a[0..-2].map { |n| visit(n) } +
-       ["return #{visit(node.child_nodes.to_a.last)}"]].join(";\n")
+      gather( [node.child_nodes.to_a[0..-2].map { |n| visit(n) } +
+              ["return #{visit(node.child_nodes.to_a.last)}"]].join(";\n"))
     else
       "return #{visit(node)}"
     end
@@ -115,14 +134,13 @@ class EightBallCompiler
     parse(ruby).accept(EightBallVisitor.new)
   end
 
-  def prelude
-    # this outputs the js runtime we need.
+  def self.compile_file(file_name)
+    prelude + compile_string(File.read(file_name))
   end
 
-  def self.cs(ruby)
-    puts "we're about to compile\n\n#{ruby}\n"
-    pp (ast = parse(ruby))
-    puts "\n\n"
-    puts ast.accept(EightBallVisitor.new)
+  def prelude
+    # this outputs the js runtime we need.
+    [File.read("lib.js"),
+     File.read("primitives.js")].join("\n")
   end
 end
