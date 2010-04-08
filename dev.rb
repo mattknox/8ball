@@ -13,6 +13,13 @@ class EightBallCompiler
   end
 end
 
+class Object
+  def method_missing(meth, *args)
+    puts "method missing: #{meth}"
+    pp args
+  end
+end
+
 e = EightBallCompiler
 v = EightBallVisitor.new
 
@@ -21,11 +28,11 @@ control = File.read("target/control.rb")
 d = File.read("target/def.rb")
 klass = File.read("target/klass.rb")
 simple = File.read("target/simple.rb")
-target = File.read("target/target.rb")
+inner_class = File.read("target/inner_class.rb")
+bm = File.read("target/bm.rb")
 x = File.read("target/x.rb")
 
-ast = e.parse(simple)
+target = bm
+ast = e.parse(target)
 d = ast.child_nodes.first.child_nodes.first
-matt = ast.child_nodes.first.child_nodes.first.child_nodes.first
-av = ast.child_nodes.first.child_nodes.to_a.last
-e.cs simple
+e.cs target

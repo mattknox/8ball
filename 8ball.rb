@@ -40,12 +40,18 @@ end
 class EightBallVisitor
   include org.jruby.ast.visitor.NodeVisitor
 
+  class NotYetImplemented < StandardError; end
+
   def visit(node)
     node.accept(self)
   end
 
   def visitRootNode(node)
     visit(node.bodyNode)
+  end
+
+  def visit_local_asgn_node(node)
+    gather("var #{node.get_name} = ", node.child_nodes.map { |n| visit(n) })
   end
 
   def visit_block_node(node)
@@ -56,13 +62,25 @@ class EightBallVisitor
     visit(node.nextNode)
   end
 
-  def visitCallOneArgNode(node)
-    visitCallNode(node)
+#  def visitCallOneArgNode(node)
+#    visitCallNode(node)
+#  end
+  def visitFCallNode
+    raise NotYetImplmented
+  end
+
+  def visitCallNoArgBlockNode
+    raise NotYetImplmented
+  end
+
+  def visitCallNoArgNode(node)
+    gather(visit(node.receiver_node), ".", mangle(node.get_name))
   end
 
   def visitCallNode(node)
-    mangle(node.getName) +
-      "#{visit(node.receiverNode)},#{visit(node.argsNode.getLast).to_s}".wrap_with("()")
+    args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
+    gather(
+           "#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
   end
 
   def visitFixnumNode(node)
@@ -73,8 +91,8 @@ class EightBallVisitor
     node.value.wrap_with('"')
   end
 
-  def mangle(method)
-    method.gsub("+", "primplus") # might need this later, leaving it for now.
+  def visit_const_node(node)
+    node.get_name
   end
 
   def visitClassNode(node)
@@ -101,7 +119,11 @@ class EightBallVisitor
   end
 
   def gather_with(str, *args)
+    raise NotYetImplemented
+  end
 
+  def mangle(method)
+    method.gsub("+", "primplus") # might need this later, leaving it for now.
   end
 
   def compile_function(name, args, body)
