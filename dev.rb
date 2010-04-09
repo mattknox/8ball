@@ -6,7 +6,7 @@ eval(File.read("8ball.rb"))
 
 class EightBallCompiler
   def self.cs(ruby)
-    puts "we're about to compile\n\n#{ruby}\n"
+    puts "we're about to compile:\n\n#{ruby}\n"
     pp (ast = parse(ruby))
     puts "\n\n"
     puts ast.accept(EightBallVisitor.new)

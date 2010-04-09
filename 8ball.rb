@@ -51,7 +51,7 @@ class EightBallVisitor
   end
 
   def visit_local_asgn_node(node)
-    gather("var #{node.get_name} = ", node.child_nodes.map { |n| visit(n) })
+    gather("var #{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
   end
 
   def visit_block_node(node)
@@ -62,25 +62,32 @@ class EightBallVisitor
     visit(node.nextNode)
   end
 
-#  def visitCallOneArgNode(node)
-#    visitCallNode(node)
-#  end
-  def visitFCallNode
-    raise NotYetImplmented
-  end
+  # def visitFCallNode(node)
+  #   raise NotYetImplmented
+  # end
 
-  def visitCallNoArgBlockNode
-    raise NotYetImplmented
+  def visitCallNoArgBlockNode(node)
+    args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
+    gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)})")
   end
 
   def visitCallNoArgNode(node)
     gather(visit(node.receiver_node), ".", mangle(node.get_name))
   end
 
+  def visitCallOneArgNode(node)
+
+  end
+
   def visitCallNode(node)
-    args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
-    gather(
-           "#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
+    if node.class == Java::OrgJrubyAst::CallNode
+      args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
+      gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
+    else
+      # for some reason, only CallNode gets a visitor.  I want to handle the separate cases separately.
+      meth = node.class.to_s.split(":").last
+      send("visit#{meth}", node)
+    end
   end
 
   def visitFixnumNode(node)
