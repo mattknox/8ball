@@ -76,7 +76,8 @@ class EightBallVisitor
   end
 
   def visitCallOneArgNode(node)
-
+    args = node.argsNode && compile_arglist(node.args_node)
+    gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
   end
 
   def visitCallNode(node)
@@ -121,6 +122,10 @@ class EightBallVisitor
     node.get_name
   end
 
+  def visitDVarNode(node)
+    node.get_name
+  end
+
   def gather(*args)
     args
   end
@@ -138,16 +143,20 @@ class EightBallVisitor
            compile_function_body(body).wrap_with(["{\n", "\n}\n"]))
   end
 
-  def compile_arglist(node)
-    node.child_nodes.to_a.map {|x| x.name}.to_comma_list
-  end
-
   def compile_function_body(node)
     if node.is_a? Java::OrgJrubyAst::BlockNode
       gather( [node.child_nodes.to_a[0..-2].map { |n| visit(n) } +
               ["return #{visit(node.child_nodes.to_a.last)}"]].join(";\n"))
     else
       "return #{visit(node)}"
+    end
+  end
+
+  def compile_arglist(node)
+    if node.class == Java::OrgJrubyAst::ArrayNode
+      node.child_nodes.to_a.map { |n| visit(n) }.to_comma_list
+    else
+      node.name
     end
   end
 end
