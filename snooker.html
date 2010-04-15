@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Snooker</title>
+</head>
+<body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="primitives.js"></script>
+
+<script type="text/javascript">
+	FilesForm = {}
+	FilesForm.init = function () {
+		this.form = $('#filesForm');
+		this.submitButton = $('#filesSubmitButton');
+		this.submitButton.bind('click', 
+			function () { 
+				jQuery.get("target/bm.rb", 
+						function (o) { 
+							$("#codeTextArea").val(o);
+						});
+			}
+			);
+	}
+	
+	CodeForm = {}
+	CodeForm.init = function () {
+		this.form = $('#codeForm');
+		this.code = $("#codeTextArea");
+		this.submitButton = $('#compileButton');
+		this.submitButton.bind('click', 
+			function () {
+				jQuery.post(
+					"cgi-bin/compile_8ball.cgi", 
+					{'code': $('#codeTextArea').val()},
+					function (data) {
+						RunForm.code.val(data);
+						}
+					);
+			}
+		);
+	}
+	
+	RunForm = {}
+	RunForm.init = function () {
+		this.form = $("#runForm");
+		this.code = $("#runFormTextArea");
+		this.submitButton = $("#executeButton");
+		this.submitButton.bind('click', 
+			function () {
+				eval(RunForm.code.val());					
+			})
+	}
+	
+	$(function () 
+		{
+			FilesForm.init();
+			CodeForm.init();
+			RunForm.init();
+		} );
+</script>
+
+<form id="filesForm">
+	<select id="filesFormOptions">
+		<option value="target/bm.rb">bm.rb</option>
+	</select>
+	<input id="filesSubmitButton" type="button" value="load">
+</form>
+
+<form id="codeForm">
+<textarea id="codeTextArea" rows="20" cols="80"></textarea><br/>
+<input id="compileButton" type="button" value="compile"/>
+</form>
+
+<form id="runForm">
+<textarea id="runFormTextArea" rows="20" cols="80"></textarea><br/>
+<input id="executeButton" type="button" value="execute"/>
+</div>
+</body>
+</html>
