@@ -51,7 +51,7 @@ class EightBallVisitor
   end
 
   def visit_local_asgn_node(node)
-    gather("var #{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
+    gather("#{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
   end
 
   def visit_block_node(node)
@@ -60,6 +60,10 @@ class EightBallVisitor
 
   def visitNewlineNode(node)
     visit(node.nextNode)
+  end
+  
+  def visitCallOneArgFixnumNode(node)
+	visitCallOneArgNode(node)
   end
 
   # def visitFCallNode(node)
@@ -80,6 +84,8 @@ class EightBallVisitor
     gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
   end
 
+  
+
   def visitCallNode(node)
     if node.class == Java::OrgJrubyAst::CallNode
       args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
@@ -92,7 +98,7 @@ class EightBallVisitor
   end
 
   def visitFixnumNode(node)
-    "#{node.value}"
+    "(#{node.value})"
   end
 
   def visitStrNode(node)
@@ -139,7 +145,7 @@ class EightBallVisitor
   end
 
   def compile_function(name, args, body)
-    gather("function #{name}#{compile_arglist(args)}",
+    gather("function #{name} (#{compile_arglist(args)})",
            compile_function_body(body).wrap_with(["{\n", "\n}\n"]))
   end
 

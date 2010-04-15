@@ -16,7 +16,6 @@
 				for (elm in data) {
 					if (data[elm]) {
 						FilesForm.options.append($("<option value=\"" + data[elm] + "\">" + data[elm] + "</option>"));
-						console.log(data[elm]);
 					}
 				}
 			}, 
@@ -59,7 +58,7 @@
 		this.submitButton = $("#executeButton");
 		this.submitButton.bind('click', 
 			function () {
-				eval(RunForm.code.val());					
+				console.log(eval(RunForm.code.val()));	
 			})
 	}
 	

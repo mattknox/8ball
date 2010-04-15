@@ -10,10 +10,10 @@ puts "Content-type: text/plain"
 puts ""
 
 class EightBallCompiler
-  def self.cs(ruby)
-	ast = parse(ruby)
-   	puts ast.accept(EightBallVisitor.new)
-  end
+	def self.cs(ruby)
+		ast = parse(ruby)
+   		puts ast.accept(EightBallVisitor.new)
+	end
 end
 
 begin 
