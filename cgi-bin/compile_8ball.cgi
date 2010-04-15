@@ -18,6 +18,7 @@ end
 
 begin 
 	EightBallCompiler.cs(code)
-rescue
-	puts "error"
+rescue => e
+	puts e.inspect
+	puts e.backtrace
 end
