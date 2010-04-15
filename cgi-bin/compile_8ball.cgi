@@ -16,4 +16,8 @@ class EightBallCompiler
   end
 end
 
-EightBallCompiler.cs(code)
+begin 
+	EightBallCompiler.cs(code)
+rescue
+	puts "error"
+end
