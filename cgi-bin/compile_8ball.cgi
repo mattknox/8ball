@@ -1,4 +1,4 @@
-#!/usr/bin/env /Users/ben/jruby/bin/jruby
+#!/usr/bin/env jruby
 
 require 'cgi'
 require '../8ball'
