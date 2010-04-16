@@ -51,7 +51,8 @@ class EightBallVisitor
   end
 
   def visit_local_asgn_node(node)
-    gather("#{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
+    var_or_nil = (node.get_depth == 0 ? 'var ' : nil)
+    gather("#{var_or_nil}#{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
   end
 
   def visit_block_node(node)
@@ -162,7 +163,7 @@ class EightBallVisitor
     if node.class == Java::OrgJrubyAst::ArrayNode
       node.child_nodes.to_a.map { |n| visit(n) }.to_comma_list
     else
-      node.name
+      node.name.wrap_with("()")
     end
   end
 end
