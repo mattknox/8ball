@@ -1,0 +1,1 @@
+change the representation of strings and numbers to (1) and ('foo') respectively, per andy lorek's observation that you can call methods on primitives represented that way.
