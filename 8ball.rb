@@ -62,7 +62,7 @@ class EightBallVisitor
   def visitNewlineNode(node)
     visit(node.nextNode)
   end
-  
+
   def visitCallOneArgFixnumNode(node)
 	visitCallOneArgNode(node)
   end
@@ -85,7 +85,7 @@ class EightBallVisitor
     gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
   end
 
-  
+
 
   def visitCallNode(node)
     if node.class == Java::OrgJrubyAst::CallNode
@@ -103,7 +103,7 @@ class EightBallVisitor
   end
 
   def visitStrNode(node)
-    node.value.wrap_with('"')
+    "('#{node.value}')"
   end
 
   def visit_const_node(node)
