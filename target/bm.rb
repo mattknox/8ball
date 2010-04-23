@@ -1,6 +1,6 @@
 #startTime = Time.new.to_f
 
-sum = 0
+sum = ""
 100000.times{|e| sum += e}
 
 #endTime = Time.new.to_f

@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>Snooker</title>
+</head>
+<body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/primitives.js"></script>
+<script type="text/javascript" src="js/lib.js"></script>
+
+<script type="text/javascript">
+	FilesForm = {}
+	FilesForm.init = function () {
+		this.options = $("#filesFormOptions");
+		$.ajax(
+			{url: "cgi-bin/list_target.cgi",
+			success: function (data) {
+				for (elm in data) {
+					if (data[elm]) {
+						FilesForm.options.append($("<option value=\"" + data[elm] + "\">" + data[elm] + "</option>"));
+					}
+				}
+			},
+			dataType: 'json'});
+		this.form = $('#filesForm');
+		this.submitButton = $('#filesSubmitButton');
+
+		this.submitButton.bind('click',
+			function () {
+				jQuery.get(FilesForm.options.val(),
+						function (o) {
+							$("#codeTextArea").val(o);
+						});
+			}
+			);
+	}
+
+	CodeForm = {}
+	CodeForm.init = function () {
+		this.form = $('#codeForm');
+		this.code = $("#codeTextArea");
+		this.submitButton = $('#compileButton');
+		this.submitButton.bind('click',
+			function () {
+				jQuery.post(
+					"cgi-bin/compile_8ball.cgi",
+					{'code': $('#codeTextArea').val()},
+					function (data) {
+						RunForm.code.val(data);
+						}
+					);
+			}
+		);
+	}
+
+	RunForm = {}
+	RunForm.init = function () {
+		this.form = $("#runForm");
+		this.code = $("#runFormTextArea");
+		this.submitButton = $("#executeButton");
+		this.submitButton.bind('click',
+			function () {
+				console.log(eval(RunForm.code.val()));
+			})
+	}
+
+	$(function ()
+		{
+			FilesForm.init();
+			CodeForm.init();
+			RunForm.init();
+		});
+</script>
+
+<form id="filesForm">
+	<select id="filesFormOptions">
+	</select>
+	<input id="filesSubmitButton" type="button" value="load">
+</form>
+
+<form id="codeForm">
+<textarea id="codeTextArea" rows="20" cols="80"></textarea><br/>
+<input id="compileButton" type="button" value="compile"/>
+</form>
+
+<form id="runForm">
+<textarea id="runFormTextArea" rows="20" cols="80"></textarea><br/>
+<input id="executeButton" type="button" value="execute"/>
+</form>
+</body>
+</html>

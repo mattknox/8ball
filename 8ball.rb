@@ -183,7 +183,7 @@ class EightBallCompiler
     prelude + compile_string(File.read(file_name))
   end
 
-  def prelude
+  def self.prelude
     # this outputs the js runtime we need.
     [File.read("lib.js"),
      File.read("primitives.js")].join("\n")
