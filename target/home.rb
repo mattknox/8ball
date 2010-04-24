@@ -52,7 +52,7 @@ class Target
   end
 end
 
-PageBenchmark.new.run({ :memcache_calls => 1000,
+PageBenchmark.new.run({ :memcache_calls => 0,
                         :method_calls => 2000,
                         :strings => 3000,
                         :string_size => 300})

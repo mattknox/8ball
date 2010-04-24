@@ -44,4 +44,4 @@ function odd(x) {
 }
 
 
-run_benchmark(1000,2000,3000,300);
+run_benchmark(0,2000,3000,300);
