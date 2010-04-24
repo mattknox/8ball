@@ -31,6 +31,7 @@ simple = File.read("target/simple.rb")
 inner_class = File.read("target/inner_class.rb")
 bm = File.read("target/bm.rb")
 x = File.read("target/x.rb")
+bool = File.read("target/bool.rb")
 
 target = bm
 ast = e.parse(target)
