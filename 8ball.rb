@@ -133,6 +133,22 @@ class EightBallVisitor
     node.get_name
   end
 
+  def visit_and_node(node)
+    node.child_nodes.map{|n| visit(n) }.join(" && ")
+  end
+
+  def visit_or_node(node)
+    node.child_nodes.map{|n| visit(n) }.join(" || ")
+  end
+
+  def visit_true_node(node)
+    "true"
+  end
+
+  def visit_false_node(node)
+    "false"
+  end
+
   def gather(*args)
     args
   end
