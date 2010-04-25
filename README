@@ -1,3 +1,10 @@
 8ball is a source-to-source compiler from (a subset of) ruby to javascript.  The only javascript engine that it explicitly targets is V8.
 
-It does not intend to support the whole of ruby-example features that probably won't ever be supported include method_missing, call-cc, and *_eval(string).
+Goals:
+to support enough of ruby to run at least some parts of twitter's infrostructure.
+to be substantially faster (2x+ faster) than the equivalent ruby code.
+to be in production as fast as possible (hopefully within a year)
+
+NonGoals:
+8ball does not intend to support the whole of ruby-example features that probably won't be supported include method_missing, callcc, and *_eval(string).
+ruby c extensions are almost certainly never going to be supported.
