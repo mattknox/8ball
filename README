@@ -8,3 +8,12 @@ to be in production as fast as possible (hopefully within a year)
 NonGoals:
 8ball does not intend to support the whole of ruby-example features that probably won't be supported include method_missing, callcc, and *_eval(string).
 ruby c extensions are almost certainly never going to be supported.
+
+
+Approach: I intend to have a minimal core, mostly implemented in ruby, that compiles down to runnable js.
+
+scenario:  I have a big ruby project that depends on a vendor'd rails and a bunch of gems.  How do I compile and run that?
+-feed the entry point file to 8ball, let it load, compile and run everything as it needs to
+-compile all the ruby files into individual js files, have node load the entry point file and then the others, as needed.
+-make the whole thing one big js file (this seems problematic)
+
