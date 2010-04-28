@@ -42,6 +42,11 @@ class EightBallVisitor
 
   class NotYetImplemented < StandardError; end
 
+  SYMBOLS_STRINGS = [['+', 'plus'],
+                     ['-', 'minus'],
+                     ['!', 'bang'],
+                     ['?', 'question']]
+
   def visit(node)
     node.accept(self)
   end
@@ -161,6 +166,10 @@ class EightBallVisitor
     method.gsub("+", "primplus") # might need this later, leaving it for now.
   end
 
+  def desymbolify(methodname)
+    SYMBOLS_STRINGS.inject(methodname) { |acc, arr| acc.gsub(arr[0], arr[1]) }
+  end
+
   def compile_function(name, args, body)
     gather("function #{name} (#{compile_arglist(args)})",
            compile_function_body(body).wrap_with(["{\n", "\n}\n"]))
@@ -195,8 +204,14 @@ class EightBallCompiler
     parse(ruby).accept(EightBallVisitor.new)
   end
 
-  def self.compile_file(file_name)
-    prelude + compile_string(File.read(file_name))
+  def self.compile_to_file(input_file, output_file)
+    File.open(output_file) do |f|
+      f.write compile_file(input_file)
+    end
+  end
+
+  def self.compile_file(input_file)
+    compile_string(File.read(input_file))
   end
 
   def self.prelude

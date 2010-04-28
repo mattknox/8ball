@@ -3,5 +3,5 @@ require 'spec'
 $LOAD_PATH.unshift ".."
 
 def cs(str)
-  EightBallCompiler.compile_string(str).join("")
+  EightBallCompiler.compile_string(str).to_a.join("")
 end
