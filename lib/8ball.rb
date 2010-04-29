@@ -90,7 +90,9 @@ class EightBallVisitor
     gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
   end
 
-
+  def visitFCallNode(node)
+    gather("#{node.name}#{compile_arglist(node.get_args_node)}")
+  end
 
   def visitCallNode(node)
     if node.class == Java::OrgJrubyAst::CallNode

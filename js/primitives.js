@@ -1,4 +1,4 @@
-function puts(string) {console.log(string);};
+function puts(string) { print(string);};
 
 function add(a,b) {
     return a + b;
@@ -8,3 +8,7 @@ function add(a,b) {
 Number.prototype.rubyplus = function(a) { return a + this; }; 
 Number.prototype.rubyminus = function(a) { return a - this; };
 Object.prototype.rubytruthy = function (x) { return (x == null || x === false) ? false : x; };
+
+print(3);
+print('foo');
+
