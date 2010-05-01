@@ -9,11 +9,17 @@ describe EightBallCompiler do
     cs("1").should == "(1)"
     cs("'foo'").should == "('foo')"
     cs("1 + 2").should == "((1).primplus((2)))" # eventually this should be "1 + 2"
+    cs("true").should == "true"
+    cs("false").should == "false"
+    cs("").should == ""
   end
 
   it "should desymbolify symbols correctly" do
     @e.desymbolify('foo!').should == "foobang"
     @e.desymbolify('foo?').should == "fooquestion"
+    @e.desymbolify('foo').should == "foo"
+    @e.desymbolify('foo_bar').should == "foo_bar"
+    @e.desymbolify('fooBar').should == "fooBar"
     @e.desymbolify('').should == ""
   end
 end
