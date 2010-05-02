@@ -1,5 +1,8 @@
 var sys = require('sys')
-function puts(string) { sys.puts(string);};
+
+EightBall = function() {};
+
+EightBall.puts = function puts(string) { sys.puts(string);};
 
 /* these should eventually do ruby-style case dispatch, and should be replaced
  with calls to naked js primitives when possible. */
@@ -18,4 +21,3 @@ String.prototype.rubytimes = function(a) {
 };
 
 Object.prototype.rubytruthy = function (x) { return (x == null || x === false) ? false : x; };
-

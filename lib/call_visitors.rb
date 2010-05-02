@@ -23,7 +23,7 @@ class EightBallVisitor
     end
 
     def visitFCallNode(node)
-      gather("#{node.name}#{compile_arglist(node.get_args_node)}")
+      gather("EightBall.#{node.name}#{compile_arglist(node.get_args_node)}")
     end
 
     def visitCallNode(node)

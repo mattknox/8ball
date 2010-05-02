@@ -7,7 +7,7 @@ class EightBallCompiler
   end
 
   def self.compile_string(ruby)
-    parse(ruby).accept(EightBallVisitor.new)
+    prelude + parse(ruby).accept(EightBallVisitor.new).join("\n")
   end
 
   def self.compile_to_file(input_file, output_file)
@@ -22,7 +22,6 @@ class EightBallCompiler
 
   def self.prelude
     # this outputs the js runtime we need.
-    [File.read("lib.js"),
-     File.read("primitives.js")].join("\n")
+    File.read("#{File.dirname(File.expand_path(__FILE__))}/../js/primitives.js")
   end
 end
