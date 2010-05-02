@@ -1,8 +1,8 @@
 require "java"
-require 'core_extensions'
-require 'trivial'
-require 'call_visitors'
-require 'helpers'
+require "#{File.dirname(File.expand_path(__FILE__))}/core_extensions"
+require "#{File.dirname(File.expand_path(__FILE__))}/trivial"
+require "#{File.dirname(File.expand_path(__FILE__))}/call_visitors"
+require "#{File.dirname(File.expand_path(__FILE__))}/helpers"
 
 class EightBallVisitor
   include org.jruby.ast.visitor.NodeVisitor

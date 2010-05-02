@@ -1,4 +1,4 @@
-require '8ball_visitor'
+require "#{File.dirname(File.expand_path(__FILE__))}/8ball_visitor"
 
 class EightBallCompiler
   def self.parse(ruby)

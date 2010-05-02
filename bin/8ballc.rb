@@ -1,4 +1,4 @@
-#! /usr/local/bin/jruby
+#!/usr/local/bin/jruby
 
 # this will take in the names of ruby files and spit the js compiled
 # from those files, or from STDIN if no files are given, to STDOUT
