@@ -33,7 +33,7 @@ class EightBallInterpreter
         js_filename = f.split('/').last.sub(/\.rb$/, ".js")
         full_filename = "#{dir}/#{js_filename}"
         js_files.push full_filename
-#        @files_to_delete.push full_filename
+        @files_to_delete.push full_filename
         File.open(full_filename, 'w') do |out|
           rb = File.read(f)
           out.write EightBallCompiler.compile_string(rb)
