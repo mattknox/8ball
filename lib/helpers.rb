@@ -1,5 +1,9 @@
 class EightBallVisitor
   module Helpers
+    def visit_or_null(node)
+      node ? visit(node) : "null"
+    end
+
     def gather(*args)
       args
     end
@@ -9,7 +13,7 @@ class EightBallVisitor
     end
 
     def mangle(method)
-      method.gsub("+", "primplus") # might need this later, leaving it for now.
+      "ruby#{desymbolify(method)}"
     end
 
     def desymbolify(methodname)
@@ -17,7 +21,7 @@ class EightBallVisitor
     end
 
     def compile_function(name, args, body)
-      gather("function #{name} (#{compile_arglist(args)})",
+      gather("function #{name} #{compile_arglist(args)}",
              compile_function_body(body).wrap_with(["{\n", "\n}\n"]))
     end
 
@@ -31,7 +35,7 @@ class EightBallVisitor
     end
 
     def compile_arglist(node)
-      if node.class == Java::OrgJrubyAst::ArrayNode
+      if node.class == Java::OrgJrubyAst::ArrayNode or node.class == Java::OrgJrubyAst::MultipleAsgnNode
         node.child_nodes.to_a.map { |n| visit(n) }.to_comma_list
       else
         node.name.wrap_with("()")

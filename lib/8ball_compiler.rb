@@ -7,8 +7,8 @@ class EightBallCompiler
   end
 
   def self.compile_string(ruby, include_prelude = true)
-    prelude = include_prelude ? prelude : ""
-    prelude + parse(ruby).accept(EightBallVisitor.new).to_a.join("")
+    js_prelude = (include_prelude ? self.prelude : "" )
+    js_prelude + parse(ruby).accept(EightBallVisitor.new).to_a.join("")
   end
 
   def self.compile_to_file(input_file, output_file)

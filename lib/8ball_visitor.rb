@@ -26,11 +26,15 @@ class EightBallVisitor
     node.child_nodes.map { |x| visit(x) }
   end
 
-  def visitFixnumNode(node)
+  def visit_if_node(node)
+    gather("(#{visit_or_null(node.condition)}) ? #{visit_or_null(node.get_then_body)} : #{visit_or_null(node.get_else_body)}")
+  end
+
+  def visit_fixnum_node(node)
     "(#{node.value})"
   end
 
-  def visitStrNode(node)
+  def visit_str_node(node)
     "('#{node.value}')"
   end
 

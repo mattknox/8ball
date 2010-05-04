@@ -12,6 +12,10 @@ class EightBallVisitor
       visit(node.next_node)
     end
 
+    def visit_array_node(node)
+      node.child_nodes.to_a.map { |n| visit(n) }
+    end
+
     def visit_root_node(node)
       visit(node.body_node)
     end
