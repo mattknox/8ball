@@ -1,7 +1,7 @@
 #startTime = Time.new.to_f
 
 sum = ""
-100000.times{|e| sum += e}
+100000.times{|e| sum += e.to_s }
 
 puts sum
 #endTime = Time.new.to_f

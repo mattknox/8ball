@@ -13,7 +13,11 @@ class EightBallVisitor
     end
 
     def visit_array_node(node)
-      node.child_nodes.to_a.map { |n| visit(n) }
+      if node.child_nodes.to_a.size == 1
+        visit(node.child_nodes.first)
+      else
+        node.child_nodes.to_a.map { |n| visit(n) }
+      end
     end
 
     def visit_root_node(node)

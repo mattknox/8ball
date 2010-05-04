@@ -14,7 +14,7 @@ class EightBallVisitor
     end
 
     def visitCallNoArgNode(node)
-      gather(visit(node.receiver_node), ".", node.get_name)
+      "#{visit(node.receiver_node)}.#{node.get_name}()"
     end
 
     def visitCallOneArgNode(node)
