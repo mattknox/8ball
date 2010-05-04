@@ -21,7 +21,7 @@ class EightBallCompiler
   end
 
   def self.prelude
-    # this outputs the js runtime we need.  Should rename the variable.
+    # primitives.js has most of the runtime we need.
     "require('../js/primitives');\n"
   end
 end
