@@ -6,8 +6,9 @@ class EightBallCompiler
     r.parse(ruby, "test_code", r.getCurrentContext.getCurrentScope, 0, true)
   end
 
-  def self.compile_string(ruby)
-    prelude + parse(ruby).accept(EightBallVisitor.new).join("\n")
+  def self.compile_string(ruby, include_prelude = true)
+    prelude = include_prelude ? prelude : ""
+    prelude + parse(ruby).accept(EightBallVisitor.new).to_a.join("")
   end
 
   def self.compile_to_file(input_file, output_file)
