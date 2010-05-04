@@ -30,8 +30,28 @@ class EightBallVisitor
     gather("(#{visit_or_null(node.condition)}) ? #{visit_or_null(node.get_then_body)} : #{visit_or_null(node.get_else_body)}")
   end
 
+  def visit_false_node(node)
+    "false"
+  end
+
+  def visit_true_node(node)
+    "true"
+  end
+
   def visit_fixnum_node(node)
     "(#{node.value})"
+  end
+
+  def visit_bignum_node(node) # js doesn't really support bignums
+    "(#{node.value})"
+  end
+
+  def visit_float_node(node)
+    "(#{node.value})"
+  end
+
+  def visit_regexp_node(node)
+    "/#{node.get_value}/"
   end
 
   def visit_str_node(node)

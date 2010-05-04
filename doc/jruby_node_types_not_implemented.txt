@@ -11,9 +11,7 @@ AttrAssignThreeArgNode
 AttrAssignTwoArgNode
 BackRefNode
 BeginNode
-BignumNode
 BlockArgNode
-BlockNode
 BlockPassNode
 BreakNode
 CallManyArgsBlockNode
@@ -53,10 +51,8 @@ EvStrNode
 FCallManyArgsBlockNode
 FCallManyArgsBlockPassNode
 FCallManyArgsNode
-FCallNoArgBlockNode
 FCallNoArgBlockPassNode
 FCallNoArgNode
-FCallNode
 FCallOneArgBlockNode
 FCallOneArgBlockPassNode
 FCallOneArgNode
@@ -69,20 +65,16 @@ FCallThreeArgNode
 FCallTwoArgBlockNode
 FCallTwoArgBlockPassNode
 FCallTwoArgNode
-FalseNode
 FileNode
 FlipNode
-FloatNode
 ForNode
 GlobalAsgnNode
 GlobalVarNode
 HashNode
-IfNode
 InstAsgnNode
 InstVarNode
 IterNode
 ListNode
-LocalAsgnNode
 Match2Node
 Match3Node
 MatchNode
@@ -105,7 +97,6 @@ OrNode
 PostExeNode
 PreExeNode
 RedoNode
-RegexpNode
 RescueBodyNode
 RescueNode
 RetryNode
@@ -118,7 +109,6 @@ StarNode
 SuperNode
 SymbolNode
 ToAryNode
-TrueNode
 TypedArgumentNode
 UndefNode
 UntilNode
