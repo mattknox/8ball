@@ -1,5 +1,13 @@
 8ball is a source-to-source compiler from (a subset of) ruby to javascript.  The only javascript engine that it explicitly targets is V8.
 
+The main interface for end users should be bin/8ball.
+
+currently, you can run ./bin/8ball target/hello.rb
+
+and get it to print out hello world.  Very little of ruby is supported yet, but the supported subset is growing fast.  Note that ./bin/8ball
+is terribly slow, because it has to start jruby, compile the files, and then feed them to v8.  Most of the time tends to be spent in jruby startup.
+
+
 Goals:
 to support enough of ruby to run at least some parts of twitter's infrostructure.
 to be substantially faster (2x+ faster) than the equivalent ruby code.
@@ -15,5 +23,5 @@ Approach: I intend to have a minimal core, mostly implemented in ruby, that comp
 scenario:  I have a big ruby project that depends on a vendor'd rails and a bunch of gems.  How do I compile and run that?
 -feed the entry point file to 8ball, let it load, compile and run everything as it needs to
 -compile all the ruby files into individual js files, have node load the entry point file and then the others, as needed.
--make the whole thing one big js file (this seems problematic)
+-make the whole thing one big js file (this seems problematic, but gets rid of require)
 

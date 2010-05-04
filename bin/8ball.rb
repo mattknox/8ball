@@ -62,10 +62,3 @@ class EightBallInterpreter
 end
 
 EightBallInterpreter.new.run
-
-# require 'open3'
-# include Open3
-# files = "js/primitives.js"
-# stdin, stdout, stderr =  Open3.popen3("v8 #{files}")
-# stdout.read
-

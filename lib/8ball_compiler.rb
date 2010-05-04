@@ -21,7 +21,7 @@ class EightBallCompiler
   end
 
   def self.prelude
-    # this outputs the js runtime we need.
-    File.read("#{File.dirname(File.expand_path(__FILE__))}/../js/primitives.js")
+    # this outputs the js runtime we need.  Should rename the variable.
+    "require('../js/primitives');\n"
   end
 end
