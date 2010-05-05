@@ -8,9 +8,10 @@ describe EightBallCompiler do
   it "should compile ruby to js" do
     cs("1").should == "(1)"
     cs("'foo'").should == "('foo')"
-    cs("1 + 2").should == "((1).primplus((2)))" # eventually this should be "1 + 2"
+    cs("1 + 2").should == "((1).rubyplus((2)))" # eventually this should be "1 + 2"
     cs("true").should == "true"
     cs("false").should == "false"
+    cs("true ? 1 : 2").should == "(true) ? (1) : (2)"
     cs("").should == ""
   end
 
