@@ -22,17 +22,15 @@ end
 
 e = EightBallCompiler
 v = EightBallVisitor.new
+h = { }
 
-avi = File.read("target/avi.rb")
-control = File.read("target/control.rb")
-d = File.read("target/def.rb")
-klass = File.read("target/klass.rb")
-simple = File.read("target/simple.rb")
-inner_class = File.read("target/inner_class.rb")
-bm = File.read("target/bm.rb")
-x = File.read("target/x.rb")
+Dir.glob('target/*').each do |path|
+  name = path.match(/target\/(.*).rb/)[1]
+  h[name] = File.read(path)
+end
 
-target = bm
+target = h['bm']
 ast = e.parse(target)
 d = ast.child_nodes.first.child_nodes.first
 e.cs target
+
