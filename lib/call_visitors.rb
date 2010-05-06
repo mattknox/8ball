@@ -8,6 +8,10 @@ class EightBallVisitor
     #   raise NotYetImplmented
     # end
 
+    def visitFCallNoArgBlockNode(node)
+      gather()
+    end
+
     def visitCallNoArgBlockNode(node)
       args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
       gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)});")
@@ -23,7 +27,12 @@ class EightBallVisitor
     end
 
     def visitFCallNode(node)
-      gather("EightBall.#{node.name}#{compile_arglist(node.get_args_node)};")
+      if node.class == Java::OrgJrubyAst::FCallNode
+        gather("EightBall.#{node.name}(#{compile_arglist(node.get_args_node)});")
+      else
+        meth = node.class.to_s.split(":").last
+        send("visit#{meth}", node)
+      end
     end
 
     def visitCallNode(node)
@@ -31,6 +40,7 @@ class EightBallVisitor
         args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
         gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}#{args}".wrap_with("()"))
       else
+        puts meth
         # for some reason, only CallNode gets a visitor.  I want to handle the separate cases separately.
         meth = node.class.to_s.split(":").last
         send("visit#{meth}", node)

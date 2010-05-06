@@ -1,9 +1,7 @@
 # stuff to aid in development
 # I like dumping this into the jirb environment with
 #  eval(File.read("dev.rb"))
-
-eval(File.read("8ball.rb"))
-
+require 'pp'
 class EightBallCompiler
   def self.cs(ruby)
     puts "we're about to compile:\n\n#{ruby}\n"
@@ -15,6 +13,7 @@ end
 
 class Object
   def method_missing(meth, *args)
+    puts "self: #{self.inspect}"
     puts "method missing: #{meth}"
     pp args
   end

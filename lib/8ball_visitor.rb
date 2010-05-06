@@ -17,6 +17,10 @@ class EightBallVisitor
                      ['!', 'bang'],
                      ['?', 'question']]
 
+  def visit_d_asgn_node(node)
+    node.name
+  end
+
   def visit_local_asgn_node(node)
     var_or_nil = (node.get_depth == 0 ? 'var ' : nil)
     gather("#{var_or_nil}#{node.get_name} = #{node.child_nodes.map { |n| visit(n) }};")
