@@ -1,0 +1,536 @@
+/~ Based on http://web.njit.edu/all_topics/Prog_Lang_Docs/html/ruby/yacc.html ~/
+
+!	' |\t|\r'
+
+'#'
+'%'
+'%='
+'&&'
+'&&='
+'&'
+'&='
+'\)'
+','
+'-'
+'-='
+'/'
+'/='
+':'
+'::'
+';'
+'<'
+'<<'
+'<<='
+'<='
+'<=>'
+'='
+'=='
+'==='
+'=>'
+'=\~'
+'>'
+'>='
+'>>'
+'>>='
+'@'
+'\+@'
+'-@'
+'[]'
+'[]='
+'alias'
+'and'
+'BEGIN'
+'case'
+'class'
+'defined\?'
+'do'
+'else'
+'elsif'
+'END'
+'end'
+'ensure'
+'for'
+'if'
+'in'
+'module'
+'nil'
+'not'
+'numeric'
+'or'
+'rescue'
+'return'
+'self'
+'undef'
+'unless'
+'until'
+'when'
+'while'
+'yield'        
+'super'
+'begin'
+'def'
+'then'
+'\!'
+'\!='
+'\!~'
+'\$'
+'\('
+'\*'
+'\*='
+'\*\*'
+'\*\*='
+'\+'
+'\+='
+'\.'
+'\.\.'
+'\.\.\.'
+'\?'
+'\n|\r' NEWLINE
+'\['
+'\^'
+'\^='
+'\|'
+'\|='
+'\|\|'
+'\|\|='
+'~'
+'\]'
+'{' OPEN_CURLY_BRACE
+'}' CLOSED_CURLY_BRACE
+'\"' DOUBLE_QUOTE
+'\'' SINGLE_QUOTE
+'`'  BACKTICK
+'[a-zA-Z_][a-zA-Z0-9_]*' IDENTIFIER
+/~ TODO make #{ terminate the regex ~/
+'([^"\\]|\\([nsrtvfbae\\"]|[0-7][0-7][0-7]|x[0-9a-fA-f][0-9a-fA-f]|u[0-9a-fA-f][0-9a-fA-f][0-9a-fA-f][0-9a-fA-f]|c.|C-.|M-(\\C-.|.)))*' ESCAPED_STRING
+'([^`\\]|\\([nsrtvfbae\\`]|[0-7][0-7][0-7]|x[0-9a-fA-f][0-9a-fA-f]|u[0-9a-fA-f][0-9a-fA-f][0-9a-fA-f][0-9a-fA-f]|c.|C-.|M-(\\C-.|.)))*' INTERPOLATED_SHELL_COMMAND
+'([^\'\\]|\\[\'\\])*' NON_INTERPOLATED_STRING            
+'[^/]' REGEX_STRING     
+'0x[0-9a-fA-f]+' HEXADECIMAL_LITERAL
+'0[0-7]+' OCTAL_LITERAL    
+'0b[0-1]+' BINARY_LITERAL
+'0|[1-9][0-9_]*' DECIMAL_INTEGER_LITERAL
+'[0-9]+' DIGITS
+'[eE]' EXPONENT_PREFIX
+'[\+-]' EXPONENT_SIGN
+'.' ANY_CHAR 
+;
+
+##
+
+PROGRAM		: COMPSTMT
+                ;
+                
+COMPSTMT        : STMT
+                | STMT TERM
+                | STMT TERM_EXPRS
+                | STMT TERM_EXPRS TERM
+                | TERM
+                ;
+                
+TERM_EXPRS      : TERM EXPR
+                | TERM_EXPRS TERM EXPR 
+                ;
+                
+STMT		: CALL DO_BLOCK
+                | undef FNAME
+		| alias FNAME FNAME
+		| STMT if EXPR
+		| STMT while EXPR
+		| STMT unless EXPR
+		| STMT until EXPR
+                | BEGIN OPEN_CURLY_BRACE COMPSTMT CLOSED_CURLY_BRACE
+                | END OPEN_CURLY_BRACE COMPSTMT CLOSED_CURLY_BRACE
+                | LHS '=' COMMAND
+                | LHS '=' COMMAND DO_BLOCK
+		| EXPR
+                ;
+
+DO_BLOCK        : do COMPSTMT end
+                | do BLOCK_VAR_DEF COMPSTMT end
+                ;
+
+BLOCK_VAR_DEF   : '|' '|'
+                | '|' BLOCK_VAR '|'
+                ;
+                
+EXPR		: MLHS '=' MRHS
+		| return CALL_ARGS
+		| yield CALL_ARGS
+		| EXPR and EXPR
+		| EXPR or EXPR
+		| not EXPR
+		| COMMAND
+		| '!' COMMAND
+		| ARG
+                ;
+
+CALL		: FUNCTION
+                | COMMAND
+                ;
+
+COMMAND		: OPERATION CALL_ARGS
+		| PRIMARY '.' OPERATION CALL_ARGS
+		| PRIMARY '::' OPERATION CALL_ARGS
+		| super CALL_ARGS
+                ;
+
+FUNCTION        : OPERATION 
+                | OPERATION CALL_ARGS_IN_PARENS
+		| PRIMARY '.' OPERATION
+		| PRIMARY '.' OPERATION CALL_ARGS_IN_PARENS
+		| PRIMARY '::' OPERATION
+		| PRIMARY '::' OPERATION CALL_ARGS_IN_PARENS
+		| super
+		| super CALL_ARGS_IN_PARENS
+                ;
+
+CALL_ARGS_IN_PARENS : '(' ')'
+                    | '(' CALL_ARGS ')'
+                    ;
+                    
+ARG		: LHS '=' ARG
+		| LHS OP_ASGN ARG
+		| ARG '..' ARG
+		| ARG '...' ARG
+		| ARG '+' ARG
+		| ARG '-' ARG
+		| ARG '*' ARG
+		| ARG '/' ARG
+		| ARG '%' ARG
+		| ARG '**' ARG
+		| '+' ARG
+		| '-' ARG
+		| ARG '|' ARG
+		| ARG '^' ARG
+		| ARG '&' ARG
+		| ARG '<=>' ARG
+		| ARG '>' ARG
+		| ARG '>=' ARG
+		| ARG '<' ARG
+		| ARG '<=' ARG
+		| ARG '==' ARG
+		| ARG '===' ARG
+		| ARG '!=' ARG
+		| ARG '=~' ARG
+		| ARG '!~' ARG
+		| '!' ARG
+		| '~' ARG
+		| ARG '<<' ARG
+		| ARG '>>' ARG
+		| ARG '&&' ARG
+		| ARG '||' ARG
+		| 'defined?' ARG
+		| PRIMARY
+                ;
+
+PRIMARY		: '(' COMPSTMT ')'
+		| LITERAL
+		| VARIABLE
+		| PRIMARY '::' IDENTIFIER
+		| '::' IDENTIFIER
+		| PRIMARY '[' ']'
+		| PRIMARY '[' ARGS ']'
+		| '[' ']'
+		| '[' ARGS ']'
+		| '[' ARGS ',' ']'
+
+		| OPEN_CURLY_BRACE CLOSED_CURLY_BRACE
+		| OPEN_CURLY_BRACE ARGS CLOSED_CURLY_BRACE
+		| OPEN_CURLY_BRACE ARGS ',' CLOSED_CURLY_BRACE
+		| OPEN_CURLY_BRACE ASSOCS CLOSED_CURLY_BRACE
+		| OPEN_CURLY_BRACE ASSOCS ',' CLOSED_CURLY_BRACE
+
+		| return
+		| return CALL_ARGS_IN_PARENS
+
+		| yield
+		| yield CALL_ARGS_IN_PARENS 
+		
+		| 'defined?' '(' ARG ')'
+                | FUNCTION
+		
+		| FUNCTION OPEN_CURLY_BRACE COMPSTMT CLOSED_CURLY_BRACE
+		| FUNCTION OPEN_CURLY_BRACE BLOCK_VAR_DEF COMPSTMT CLOSED_CURLY_BRACE
+		
+		| if EXPR THEN COMPSTMT end
+  		| if EXPR THEN COMPSTMT else COMPSTMT end
+  		| if EXPR THEN COMPSTMT ELSE_IF end
+  		| if EXPR THEN COMPSTMT ELSE_IF else COMPSTMT end
+
+		| unless EXPR THEN COMPSTMT end
+		| unless EXPR THEN COMPSTMT else COMPSTMT end
+
+		| while EXPR DO COMPSTMT end
+
+		| until EXPR DO COMPSTMT end
+
+		| case COMPSTMT CASES end
+		| case COMPSTMT CASES else COMPSTMT end
+		
+		| for BLOCK_VAR in EXPR DO COMPSTMT end
+
+                | begin COMPSTMT end
+                | begin COMPSTMT RESCUES end
+                | begin COMPSTMT else COMPSTMT end
+                | begin COMPSTMT ensure COMPSTMT end
+                | begin COMPSTMT RESCUES else COMPSTMT end
+                | begin COMPSTMT RESCUES ensure COMPSTMT end
+                | begin COMPSTMT else COMPSTMT ensure COMPSTMT end
+                | begin COMPSTMT RESCUES else COMPSTMT ensure COMPSTMT end
+
+		| class IDENTIFIER COMPSTMT end
+		| class IDENTIFIER '<' IDENTIFIER COMPSTMT end
+		
+		| module IDENTIFIER COMPSTMT end
+		| def FNAME ARGDECL COMPSTMT end
+
+		| def SINGLETON '.'  FNAME ARGDECL COMPSTMT end
+		| def SINGLETON '::' FNAME ARGDECL COMPSTMT end
+                ;
+
+ELSE_IF         : elsif EXPR THEN COMPSTMT
+                | ELSE_IF elsif EXPR THEN COMPSTMT
+                ;
+
+CASES           : when WHEN_ARGS THEN COMPSTMT
+                | CASES when WHEN_ARGS THEN COMPSTMT
+                ;
+
+RESCUES         : rescue DO COMPSTMT
+                | rescue ARGS DO COMPSTMT
+                | RESCUES rescue DO COMPSTMT
+                | RESCUES rescue ARGS DO COMPSTMT      
+                ;
+                
+WHEN_ARGS	: ARGS
+                | ARGS ',' '*' ARG
+		| '*' ARG
+                ;
+
+THEN		: TERM
+		| then
+		| TERM then
+                ;
+
+DO		: TERM
+		| do
+		| TERM do
+                ;
+
+BLOCK_VAR	: LHS
+		| MLHS
+                ;
+
+MLHS		: MLHS_ITEM_LIST
+                | MLHS_ITEM_LIST '*'
+                | MLHS_ITEM_LIST '*' LHS
+                | '*' LHS
+                ;
+
+MLHS_ITEM_LIST  : MLHS
+                | MLHS_ITEM_LIST MLHS
+                ;
+                
+MLHS_ITEM	: LHS
+		| '(' MLHS ')'
+                ;
+
+LHS		: VARIABLE
+		| PRIMARY '[' ']'
+		| PRIMARY '[' ARGS ']'
+		| PRIMARY '.' IDENTIFIER
+                ;
+
+MRHS		: ARGS
+                | ARGS ',' '*' ARG
+		| '*' ARG
+                ;
+
+CALL_ARGS	: ARGS
+		| ARGS ',' ASSOCS
+		| ARGS ',' '*' ARG
+		| ARGS ',' '&' ARG
+		| ARGS ',' ASSOCS ',' '*' ARG
+		| ARGS ',' ASSOCS ',' '&' ARG
+		| ARGS ',' '*' ARG ',' '&' ARG
+		| ARGS ',' ASSOCS ',' '*' ARG ',' '&' ARG
+		| ASSOCS
+		| ASSOCS ',' '*' ARG
+		| ASSOCS ',' '&' ARG
+		| ASSOCS ',' '*' ARG ',' '&' ARG
+		| '*' ARG
+		| '*' ARG ',' '&' ARG
+		| '&' ARG
+		| COMMAND
+                ;
+
+ARGS 		: ARG
+                | ARGS ',' ARG
+                ;
+
+ARGDECL		: '(' ARGLIST ')'
+		| ARGLIST TERM
+                ;
+
+ARGLIST		: IDENTIFIER_LIST
+                | IDENTIFIER_LIST ',' '*'
+                | IDENTIFIER_LIST ',' '*' IDENTIFIER
+                | IDENTIFIER_LIST ',' '&' IDENTIFIER
+                | IDENTIFIER_LIST ',' '*' ',' '&' IDENTIFIER
+                | IDENTIFIER_LIST ',' '*' IDENTIFIER ',' '&' IDENTIFIER
+                | '*' IDENTIFIER
+                | '&' IDENTIFIER
+                | '*' IDENTIFIER ',' '&' IDENTIFIER
+                ;
+
+IDENTIFIER_LIST : IDENTIFIER
+                | IDENTIFIER_LIST ',' IDENTIFIER
+                ;
+
+SINGLETON	: VARIABLE
+		| '(' EXPR ')'
+                ;
+
+ASSOCS		: ASSOC
+                | ASSOCS ',' ASSOC
+                ;
+
+ASSOC		: ARG '=>' ARG
+                ;
+
+VARIABLE	: VARNAME
+		| nil
+		| self
+                ;
+
+/~
+LITERAL		: NUMBER_LITERAL
+		| SYMBOL
+		| STRING
+		| STRING2
+		| HERE_DOC
+		| REGEXP
+                ;
+~/
+
+LITERAL		: NUMBER_LITERAL
+		| SYMBOL
+		| STRING
+                ;
+
+NUMBER_LITERAL  : HEXADECIMAL_LITERAL
+                | BINARY_LITERAL
+                | OCTAL_LITERAL
+                | DECIMAL_INTEGER_LITERAL
+                | FP_LITERAL
+                ;
+                
+FP_LITERAL      : POINTFLOAT 
+                | EXPONENTFLOAT
+                ;
+                
+POINTFLOAT      : FRACTION
+                | INTPART FRACTION
+                | INTPART '.'
+                ;
+                
+EXPONENTFLOAT   : INTPART EXPONENT
+                | POINTFLOAT EXPONENT
+                ;
+
+INTPART         : DIGITS
+                ;
+                
+FRACTION        : '.' DIGITS
+                ;
+
+EXPONENT        : EXPONENT_PREFIX DIGITS
+                | EXPONENT_PREFIX EXPONENT_SIGN DIGITS
+                ;
+                
+TERM		: ';'
+		| NEWLINE
+                ;
+
+/~ The followings are recognized by lexical analyzer. ~/
+
+OP_ASGN		: '+=' | '-=' | '*=' | '/=' | '%=' | '**='
+		| '&=' | '|=' | '^=' | '<<=' | '>>='
+		| '&&=' | '||='
+                ;
+
+SYMBOL		: ':'FNAME
+		| ':'VARNAME
+                ;
+
+FNAME		: IDENTIFIER | '..' | '|' | '^' | '&'
+		| '<=>' | '==' | '===' | '=~'
+                | '>' | '>=' | '<' | '<='
+		| '+' | '-' | '*' | '/' | '%' | '**'
+		| '<<' | '>>' | '~'
+                | '+@' | '-@' | '[]' | '[]='
+                ;
+
+OPERATION       : IDENTIFIER
+                | IDENTIFIER'!'
+                | IDENTIFIER'?'
+                ;
+
+VARNAME		: GLOBAL
+		| '@'IDENTIFIER
+		| IDENTIFIER
+                ;
+
+GLOBAL		: '$'IDENTIFIER
+		| '$'ANY_CHAR
+		| '$''-'ANY_CHAR
+                ;
+
+STRING		: DOUBLE_QUOTE DOUBLE_QUOTE
+                | DOUBLE_QUOTE INTERPOLATED_STRING DOUBLE_QUOTE
+		| SINGLE_QUOTE NON_INTERPOLATED_STRING SINGLE_QUOTE
+		| BACKTICK INTERPOLATED_SHELL_COMMAND BACKTICK
+                ;
+
+INTERPOLATED_STRING : ESCAPED_STRING
+                    | INTERPOLATION
+                    | INTERPOLATED_STRING ESCAPED_STRING
+                    | INTERPOLATED_STRING INTERPOLATION
+                    ;
+
+INTERPOLATION : '#' OPEN_CURLY_BRACE EXPR CLOSED_CURLY_BRACE
+              ;
+                                  
+/~ 
+STRING2		: '%'('Q'|'q'|'x')char any_char* char
+                ;
+
+HERE_DOC        : '<<'(IDENTIFIER|STRING)
+                  any_char*
+                  IDENTIFIER
+                ;
+
+REGEXP		: '/' REGEX_STRING '/' REGEX_FLAG?
+		| '%''r' char any_char* char
+                ;
+~/
+        
+[*
+if(arguments.length > 0) {
+    var str = file_read( arguments[0] );
+    var error_cnt = 0;
+    var error_off = new Array();
+    var error_la = new Array();
+	
+    if((error_cnt = __##PREFIX##parse(str, error_off, error_la)) > 0) {
+        var i;
+	for( i = 0; i < error_cnt; i++ ) {
+	    print( "Parse error near >" + str.substr( error_off[i], 30 ) + "<, expecting \"" + error_la[i].join() + "\"" );
+	}
+    }
+}
+else {
+    print( 'usage: ruby.js <filename>' );
+}
+*]
