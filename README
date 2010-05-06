@@ -25,3 +25,9 @@ scenario:  I have a big ruby project that depends on a vendor'd rails and a bunc
 -compile all the ruby files into individual js files, have node load the entry point file and then the others, as needed.
 -make the whole thing one big js file (this seems problematic, but gets rid of require)
 
+
+possible approach: ruby parser in js produces ruby AST of javascript objects, which is then transformed by a javascript program into a javascript AST.  The ruby and js ASTs will go through some number of transformations for optimization purposes, before finally the js AST is unparsed into actual javascript, which is finally handed off to V8 for uncomfortably fast execution.
+
+at this point, we have nothing but js implementing our 8ball version of ruby.
+
+path to that approach:  currently in-progress jruby compiler to js compiles enough of ruby to compile ruby_parser and a nice ruby AST (like jruby's) to js.  This then self-compiles.

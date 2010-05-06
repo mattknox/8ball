@@ -1,4 +1,3 @@
-
 var sys = require('sys');
 
 EightBall = function() {};
