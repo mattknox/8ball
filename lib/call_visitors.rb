@@ -9,12 +9,20 @@ class EightBallVisitor
     # end
 
     def visitFCallNoArgBlockNode(node)
-      gather()
+      if "lambda" == node.name  # have to specialcase lambda handling
+        compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node).wrap_with("()")
+      else
+        raise 'not yet implemented'
+      end
     end
 
     def visitCallNoArgBlockNode(node)
-      args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
-      gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)});")
+      if ("new" == node.name ) and ("Proc" == node.receiver_node.name)
+        compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node).wrap_with("()")
+      else
+        args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
+        gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)});")
+      end
     end
 
     def visitCallNoArgNode(node)
@@ -40,9 +48,9 @@ class EightBallVisitor
         args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
         gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}#{args}".wrap_with("()"))
       else
-        puts meth
         # for some reason, only CallNode gets a visitor.  I want to handle the separate cases separately.
         meth = node.class.to_s.split(":").last
+        puts meth
         send("visit#{meth}", node)
       end
     end

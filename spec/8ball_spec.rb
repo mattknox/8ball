@@ -12,7 +12,8 @@ describe EightBallCompiler do
     cs("true").should == "true"
     cs("false").should == "false"
     cs("true ? 1 : 2").should == "(true) ? (1) : (2)"
-    cs('lambda {|x| x + 1}').should == "function(x) { return (x).rubyplus((1)); }"
+    cs('lambda {|x| x + 1}').should == "(function  (x){\nreturn (x.rubyplus((1)));\n}\n)"
+    cs('Proc.new {|x| x + 1}').should == "(function  (x){\nreturn (x.rubyplus((1)));\n}\n)"
     cs("").should == ""
   end
 

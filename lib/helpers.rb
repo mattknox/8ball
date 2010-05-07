@@ -34,9 +34,9 @@ class EightBallVisitor
     def compile_function_body(node)
       if node.is_a? Java::OrgJrubyAst::BlockNode
         gather( [node.child_nodes.to_a[0..-2].map { |n| visit(n) } +
-                 ["return #{visit(node.child_nodes.to_a.last)}"]].join(";\n"))
+                 ["return #{visit(node.child_nodes.to_a.last)};"]].join(";\n"))
       else
-        "return #{visit(node)}"
+        "return #{visit(node)};"
       end
     end
 
