@@ -6,9 +6,9 @@ rb AST -> js AST
 js AST -> more optimized js AST 0+ times
 js AST -> string
 
-One possible path to this point is to implement a compiler from jruby AST to js in jruby, and then a parser, AST, optional AST->AST passes, the rbAST->jsAST compiler, and js unparsing in ruby.  Then the whole thing can self-host.
+All 3+ of these passes could be in js or ruby, although it would be somewhat awkward to have any ruby after the js starts.  So in practice, that means there are N+1 possible places to go from ruby to js.  Ideally, the entire toolchain should be in ruby, to the extent to which that is possible.
 
-Ideally, the entire toolchain should be in ruby, to the extent to which that is possible.
+One possible path to this point is to implement a compiler from jruby AST to js in jruby, and then a parser, AST, optional AST->AST passes, the rbAST->jsAST compiler, and js unparsing in ruby.  Then the whole thing can self-host.
 
 
 'lambda {|x| x + 1 }' should compile something like this:
