@@ -33,3 +33,19 @@ class Array
     end
   end
 end
+
+# should move this into dev, as it is not needed for the compiler.
+module Java
+  module OrgJrubyAst
+    class Node
+      def leaf?; self.childNodes.empty?; end
+      def child_count; self.childNodes.size; end
+      def child(index); self.childNodes[index]; end
+      def first_child; self.child_nodes[0]; end
+      def index_of_child(child); self.childNodes.index child; end
+      def descend_tree(*indices)
+        indices.inject(self) { |node, i| node.get_child(i)}
+      end
+    end
+  end
+end

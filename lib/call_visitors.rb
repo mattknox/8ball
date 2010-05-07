@@ -12,7 +12,7 @@ class EightBallVisitor
       if "lambda" == node.name  # have to specialcase lambda handling
         compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node).wrap_with("()")
       else
-        raise 'not yet implemented'
+        raise NotYetImplemented
       end
     end
 
@@ -50,7 +50,6 @@ class EightBallVisitor
       else
         # for some reason, only CallNode gets a visitor.  I want to handle the separate cases separately.
         meth = node.class.to_s.split(":").last
-        puts meth
         send("visit#{meth}", node)
       end
     end
