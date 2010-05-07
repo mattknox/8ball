@@ -6,15 +6,9 @@ rb AST -> js AST
 js AST -> more optimized js AST 0+ times
 js AST -> string
 
-ideally, the entire toolchain should be in ruby, allowing us to emit just the js that we need.
 One possible path to this point is to implement a compiler from jruby AST to js in jruby, and then a parser, AST, optional AST->AST passes, the rbAST->jsAST compiler, and js unparsing in ruby.  Then the whole thing can self-host.
 
-
-another possible approach: ruby parser in js produces ruby AST of javascript objects, which is then transformed by a javascript program into a javascript AST.  The ruby and js ASTs will go through some number of transformations for optimization purposes, before finally the js AST is unparsed into actual javascript, which is finally handed off to V8 for uncomfortably fast execution.
-
-at this point, we have nothing but js implementing our 8ball version of ruby.
-
-I prefer the former, as it keeps most of the implementation in ruby, and would allow for more tree-shaking: we could more easily keep around only that bit of ruby which we neded.
+Ideally, the entire toolchain should be in ruby, to the extent to which that is possible.
 
 
 'lambda {|x| x + 1 }' should compile something like this:
@@ -22,3 +16,5 @@ I prefer the former, as it keeps most of the implementation in ruby, and would a
 (lambda (x:int) (+ x:int 1))  ; optional typeinference *insert far-future handwaving here*
 (function (x:int) (return (binop+ x:int 1)))
 'function (x){ return x + 1;}'
+
+parsing is pretty hard but has been solved in ruby already: ruby_parser handles it.  The rest of the compiler proper is fairly trivial by comparison.
