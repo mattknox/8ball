@@ -56,7 +56,7 @@ class EightBallVisitor
   end
 
   def visit_regexp_node(node)
-    "/#{node.get_value}/"
+    "(/#{node.get_value}/)"
   end
 
   def visit_str_node(node)
