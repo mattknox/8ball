@@ -1,35 +1,23 @@
-# stuff to aid in development
-# I like dumping this into the jirb environment with
-#  eval(File.read("dev.rb"))
-require 'pp'
-class EightBallCompiler
-  def self.cs(ruby)
-    puts "we're about to compile:\n\n#{ruby}\n"
-    pp (ast = parse(ruby))
-    puts "\n\n"
-    puts ast.accept(EightBallVisitor.new)
+require 'lib/8ball'
+
+def test_all
+  Dir.glob('target/*').each do |path|
+    name = path.match(/target\/(.*).rb/)[1]
+    ruby = File.read(path)
+    puts "file: #{name}"
+    puts "containing ruby:\n#{ruby}"
+    puts "compiles to:\n#{EightBallCompiler.compile_string}"
   end
 end
 
-class Object
-  def method_missing(meth, *args)
-    puts "self: #{self.inspect}"
-    puts "method missing: #{meth}"
-    pp args
-  end
+def reload(f)
+  eval File.read("lib/#{f}.rb")
 end
 
 e = EightBallCompiler
 v = EightBallVisitor.new
-h = { }
-
-Dir.glob('target/*').each do |path|
-  name = path.match(/target\/(.*).rb/)[1]
-  h[name] = File.read(path)
-end
-
-target = h['bm']
-ast = e.parse(target)
-d = ast.child_nodes.first.child_nodes.first
-e.cs target
-
+a = e.parse 'lambda {|x| x + 1}'
+b = e.parse 'Proc.new {|x| x + 1 }'
+d = e.parse 'Class Foo < Fixnum;def bar; 1+2;end;end'
+x = a.child_nodes.first.next_node
+a.accept v
