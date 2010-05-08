@@ -64,7 +64,7 @@ class EightBallVisitor
   end
 
   def visit_const_node(node)
-    node.get_name
+    "(#{node.get_name})"
   end
 
   # def visitClassNode(node)

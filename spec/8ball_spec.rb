@@ -15,6 +15,7 @@ describe EightBallCompiler do
     cs('lambda {|x| x + 1}').should == "(function  (x){\nreturn (x.rubyplus((1)));\n}\n)"
     cs('Proc.new {|x| x + 1}').should == "(function  (x){\nreturn (x.rubyplus((1)));\n}\n)"
     cs('/foo/').should == "(/foo/)"
+    cs('Foo').should == "(Foo)"
     cs("").should == ""
   end
 
