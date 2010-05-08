@@ -2,6 +2,7 @@ require "java"
 require "#{File.dirname(File.expand_path(__FILE__))}/core_extensions"
 require "#{File.dirname(File.expand_path(__FILE__))}/trivial"
 require "#{File.dirname(File.expand_path(__FILE__))}/call_visitors"
+require "#{File.dirname(File.expand_path(__FILE__))}/def_visitors"
 require "#{File.dirname(File.expand_path(__FILE__))}/helpers"
 
 class EightBallVisitor
@@ -66,12 +67,12 @@ class EightBallVisitor
     node.get_name
   end
 
-  def visitClassNode(node)
-    gather("this.define_class(\"#{node.getCPath.getName}\",",
-           "function() {",
-           visit(node.bodyNode),
-           "})")
-  end
+  # def visitClassNode(node)
+  #   gather("this.define_class(\"#{node.getCPath.getName}\",",
+  #          "function() {",
+  #          visit(node.bodyNode),
+  #          "})")
+  # end
 
   def visitDefnNode(node)
     compile_function(node.get_name, node.args_node.args, node.body_node)
