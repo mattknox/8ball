@@ -74,9 +74,9 @@ class EightBallVisitor
   #          "})")
   # end
 
-  def visitDefnNode(node)
-    compile_function(node.get_name, node.args_node.args, node.body_node)
-  end
+  # def visitDefnNode(node)
+  #   compile_function(node.get_name, node.args_node.args, node.body_node)
+  # end
 
   def visitArgsNode(node)
     node.args.child_nodes.to_a.map {|x| x.name}.join(", ")
