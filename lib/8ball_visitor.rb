@@ -10,6 +10,7 @@ class EightBallVisitor
   include EightBallVisitor::Trivial
   include EightBallVisitor::CallVisitors
   include EightBallVisitor::Helpers
+  include EightBallVisitor::DefVisitors
 
   class NotYetImplemented < StandardError; end
 

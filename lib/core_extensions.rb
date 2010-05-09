@@ -44,7 +44,7 @@ module Java
       def first_child; self.child_nodes[0]; end
       def index_of_child(child); self.childNodes.index child; end
       def descend_tree(*indices)
-        indices.inject(self) { |node, i| node.get_child(i)}
+        indices.inject(self) { |node, i| node.child(i)}
       end
     end
   end

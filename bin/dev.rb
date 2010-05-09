@@ -18,6 +18,6 @@ e = EightBallCompiler
 v = EightBallVisitor.new
 a = e.parse 'lambda {|x| x + 1}'
 b = e.parse 'Proc.new {|x| x + 1 }'
-d = e.parse 'Class Foo < Fixnum;def bar; 1+2;end;end'
+d = e.parse 'class Foo < Fixnum;def bar; 1+2;end;end'
 x = a.child_nodes.first.next_node
 a.accept v

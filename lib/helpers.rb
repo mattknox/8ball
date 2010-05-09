@@ -37,10 +37,13 @@ class EightBallVisitor
     def compile_arglist(node)
       if node.class == Java::OrgJrubyAst::ArrayNode or node.class == Java::OrgJrubyAst::MultipleAsgnNode
         node.child_nodes.to_a.map { |n| visit(n) }.to_comma_list
+      elsif node.class == Java::OrgJrubyAst::ArgsNoArgNode
+        "()"
       elsif node
         node.name.wrap_with("()")
       else
         puts 'got into a weird arglist'
+        puts node.class
         puts caller
       end
     end

@@ -34,9 +34,13 @@ class EightBallVisitor
       gather("#{visit(node.receiverNode)}.#{ mangle(node.getName)}#{args}".wrap_with("()"))
     end
 
+    def visitFCallOneArgNode(node)
+      gather("EightBall.#{node.name}#{compile_arglist(node.get_args_node)};")
+    end
+
     def visitFCallNode(node)
       if node.class == Java::OrgJrubyAst::FCallNode
-        gather("EightBall.#{node.name}(#{compile_arglist(node.get_args_node)});")
+        gather("EightBall.#{node.name}#{compile_arglist(node.get_args_node)};")
       else
         meth = node.class.to_s.split(":").last
         send("visit#{meth}", node)
