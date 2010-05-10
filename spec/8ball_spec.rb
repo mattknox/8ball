@@ -16,9 +16,10 @@ describe EightBallCompiler do
     cs('Proc.new {|x| x + 1}').should == "(function  (x){\nreturn (x.rubyplus((1)));\n}\n)"
     cs('/foo/').should == "(/foo/)"
     cs('Foo').should == "(Foo)"
-    cs('class Foo < Fixnum;def bar; 1+2;end;end').should == "Class.define(Foo, Fixnum, function bar (){\nreturn ((1).rubyplus((2)));\n}\n)"
+    cs('class Foo < Fixnum;def bar;1+2;end;end').should == "Class.define(Foo, Fixnum, function bar (){\nreturn ((1).rubyplus((2)));\n}\n)"
     cs('puts "hello"').should == "EightBall.puts(('hello'));"
     cs("'foo'.length").should == "('foo').length()"
+    cs("[2,3]").should == "([(2), (3)])"
     cs("").should == ""
   end
 
