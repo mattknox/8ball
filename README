@@ -10,7 +10,7 @@ is terribly slow, because it has to start jruby, compile the files, and then fee
 
 Goals:
 to support enough of ruby to run at least some parts of twitter's infrostructure.
-to be substantially faster (2x+ faster) than the equivalent ruby code.
+to be substantially faster (2x+ faster) than the equivalent ruby code running in REE 1.8.7 (this version is chosen because it's what twitter runs on now.ag).
 to be in production as fast as possible (hopefully within a year)
 
 NonGoals:
