@@ -78,13 +78,6 @@ class EightBallVisitor
     "({#{acc.join(', ')}})"
   end
 
-  # def visitClassNode(node)
-  #   gather("this.define_class(\"#{node.getCPath.getName}\",",
-  #          "function() {",
-  #          visit(node.bodyNode),
-  #          "})")
-  # end
-
   def visitArgsNode(node)
     node.args.child_nodes.to_a.map {|x| x.name}.join(", ")
   end
