@@ -9,20 +9,12 @@ class EightBallVisitor
     # end
 
     def visitFCallNoArgBlockNode(node)
-      if "lambda" == node.name  # have to specialcase lambda handling
-        compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node).wrap_with("()")
-      else
-        raise NotYetImplemented
-      end
+      gather("this.#{node.name}(#{compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)})")
     end
 
     def visitCallNoArgBlockNode(node)
-      if ("new" == node.name ) and ("Proc" == node.receiver_node.name)
-        compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node).wrap_with("()")
-      else
-        args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
-        gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)});")
-      end
+      args = node.argsNode && visit(node.argsNode.getLast).to_comma_list
+      gather("#{visit(node.receiverNode)}.#{mangle(node.get_name)}(#{ compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)});")
     end
 
     def visitCallNoArgNode(node)
