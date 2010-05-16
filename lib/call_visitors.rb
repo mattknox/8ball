@@ -4,10 +4,6 @@ class EightBallVisitor
       visitCallOneArgNode(node)
     end
 
-    # def visitFCallNode(node)
-    #   raise NotYetImplmented
-    # end
-
     def visitFCallNoArgBlockNode(node)
       gather("this.#{node.name}(#{compile_function(nil, node.get_iter_node.get_var_node, node.get_iter_node.get_body_node)})")
     end
