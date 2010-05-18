@@ -4,3 +4,14 @@
 
   // http://peter.michaux.ca/articles/the-command-pattern-in-javascript-encapsulating-function-property-calls
   // http://wiki.github.com/ry/node/modules
+
+var EightBall = function(){};
+
+EightBall.extend = function(body) { return this;};
+EightBall.define_class = function(classname, superclass, body){
+    this[classname] = superclass.extend(body);
+    this[classname]["name"] = classname
+};
+
+var Class = function(classname, superclass, body){};
+
