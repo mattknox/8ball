@@ -17,6 +17,6 @@ One possible path to this point is to implement a compiler from jruby AST to js 
 (function (x:int) (return (binop+ x:int 1)))
 'function (x){ return x + 1;}'
 
-parsing is pretty hard but has been solved in ruby already: ruby_parser handles it.  The rest of the compiler proper is fairly trivial by comparison.
+parsing is pretty hard but has been solved in ruby already: ruby_parser handles it.  The rest of the compiler proper is fairly trivial by comparison.  Likewise, the test suite and most of the standard library are provided by rubinius, and v8 does the runtime.
 
 need classes and modules, then to compile the rendering of the public timeline.
