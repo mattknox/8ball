@@ -13,5 +13,3 @@ EightBall.define_class = function(classname, superclass, body){
     this[classname]["name"] = classname
 };
 
-var Class = function(classname, superclass, body){};
-
