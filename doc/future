@@ -21,4 +21,4 @@ parsing is pretty hard but has been solved in ruby already: ruby_parser handles 
 
 need classes and modules, then to compile the rendering of the public timeline.
 
-take a look at JS.class.  It looks boss so  far.
+take a look at JS.class.  It looks boss so far-might just include it as part of the runtime, and use the extensions to Array, Hash, etc..
