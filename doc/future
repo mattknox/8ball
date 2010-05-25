@@ -24,3 +24,4 @@ need classes and modules, then to compile the rendering of the public timeline.
 take a look at JS.class.  It looks boss so far-might just include it as part of the runtime, and use the extensions to Array, Hash, etc..
 
 Also take a look at rubyjs.  It appears to be almost a complete solution.
+also, take a look at red.  That is perhaps even closer, and seems to work.
