@@ -25,3 +25,5 @@ take a look at JS.class.  It looks boss so far-might just include it as part of 
 
 Also take a look at rubyjs.  It appears to be almost a complete solution.
 also, take a look at red.  That is perhaps even closer, and seems to work.
+
+neither red nor rubyjs are usable as such, given that they want to make a single file, and I want to statically compile files.
