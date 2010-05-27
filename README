@@ -24,3 +24,7 @@ scenario:  I have a big ruby project that depends on a vendor'd rails and a bunc
 -feed the entry point file to 8ball, let it load, compile and run everything as it needs to
 -compile all the ruby files into individual js files, have node load the entry point file and then the others, as needed.
 -make the whole thing one big js file (this seems problematic, but gets rid of require)
+
+
+
+need to consider a port to ruby_parser, so that we can run without jruby
